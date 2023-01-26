@@ -1,10 +1,14 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import {
+  faArrowUpRightFromSquare,
   faBuilding,
   faUserGroup,
-  faArrowUpRightFromSquare,
 } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useQuery } from 'react-query'
+
+import { api } from '../../../../lib/axios'
+
 import {
   ProfileContainer,
   ProfileContent,
@@ -12,36 +16,74 @@ import {
   ProfileInfo,
 } from './styles'
 
-export function Profile() {
+interface ProfileProps {
+  username: string
+}
+
+interface UserProfile {
+  name: string
+  avatarUrl?: string
+  bio?: string
+  followers: number
+  company?: string
+  profileUrl: string
+}
+
+export function Profile({ username }: ProfileProps) {
+  const { data: userProfile } = useQuery<UserProfile>(
+    'profile',
+    async () => {
+      const response = await api.get(`/users/${username}`)
+
+      const {
+        name,
+        avatar_url: avatarUrl,
+        bio,
+        followers,
+        company,
+        html_url: profileUrl,
+      } = response.data
+
+      return {
+        name,
+        followers,
+        profileUrl,
+        avatarUrl,
+        bio,
+        company,
+      }
+    },
+    {
+      staleTime: 1000 * 60, // 1 minute
+    },
+  )
+
   return (
     <ProfileContainer>
-      <img src="https://avatars.githubusercontent.com/u/57322620?v=4" alt="" />
+      <img src={userProfile?.avatarUrl} alt="Avatar" />
       <ProfileContent>
         <ProfileHeader>
-          <span>Matheus Menezes Pedrosa</span>
-          <a href="">
+          <span>{userProfile?.name}</span>
+          <a target="_blank" href={userProfile?.profileUrl} rel="noreferrer">
             GITHUB
             <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
           </a>
         </ProfileHeader>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis,
-          porro nemo. Magni consequuntur voluptatibus neque officiis, molestias
-          necessitatibus! Iste quis tenetur error cupiditate eius quod libero
-          veritatis porro distinctio deleniti!
-        </p>
+
+        <p>{userProfile?.bio}</p>
+
         <ProfileInfo>
           <div>
             <FontAwesomeIcon icon={faGithub} />
-            mmpdrosa
+            {username}
           </div>
           <div>
             <FontAwesomeIcon icon={faBuilding} />
-            Rocketseat
+            {userProfile?.company}
           </div>
           <div>
             <FontAwesomeIcon icon={faUserGroup} />
-            {'5 seguidores'}
+            {`${userProfile?.followers} seguidores`}
           </div>
         </ProfileInfo>
       </ProfileContent>

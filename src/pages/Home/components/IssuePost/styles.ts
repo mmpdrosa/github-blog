@@ -1,12 +1,16 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-export const PostContainer = styled.section`
+export const IssuePostContainer = styled(Link)`
+  width: 100%;
   display: flex;
   flex-direction: column;
+  height: 16.25rem;
   gap: 2rem;
   padding: 2rem;
   background-color: ${(props) => props.theme.post};
   border-radius: 10px;
+  text-decoration: none;
 
   header {
     display: flex;
@@ -24,5 +28,11 @@ export const PostContainer = styled.section`
       font-size: 0.875rem;
       color: ${(props) => props.theme.span};
     }
+  }
+
+  p {
+    color: ${(props) => props.theme.text};
+    overflow: hidden;
+    text-overflow: clip;
   }
 `

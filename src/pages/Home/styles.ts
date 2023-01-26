@@ -5,11 +5,11 @@ export const HomeContainer = styled.div`
   margin-bottom: 10rem;
 `
 
-export const PostsContainer = styled.div`
+export const IssuesPostsContainer = styled.div`
   margin-top: 4.5rem;
 `
 
-export const PostsSearch = styled.div`
+export const IssuesPostsSearch = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -44,9 +44,9 @@ export const PostsSearch = styled.div`
   }
 `
 
-export const PostsList = styled.main`
+export const IssuesPostsList = styled.main`
   margin-top: 3rem;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2rem;
 `
